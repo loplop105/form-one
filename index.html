@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فرم درخواست ملک با کپچا (ترتیب اصلاح شده)</title>
+    <style>
+        /* =============== شروع استایل‌های فرم =============== */
+        .custom-form-wrapper {
+            font-family: 'Vazirmatn', 'IRANSans', Arial, sans-serif;
+            background-color: #FFFFFF;
+            padding: 30px 35px;
+            border-radius: 16px;
+            box-shadow: 0 10px 35px rgba(170, 180, 200, 0.15), 0 4px 15px rgba(170, 180, 200, 0.1);
+            margin: 20px auto;
+            box-sizing: border-box;
+            width: 100%;
+            max-width: 720px;
+        }
+        .custom-form-wrapper *,
+        .custom-form-wrapper *::before,
+        .custom-form-wrapper *::after {
+            box-sizing: border-box;
+        }
+        .custom-form-wrapper .form-title {
+            font-size: 1.75rem;
+            color: #333333;
+            margin-top: 0;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #E0E6ED;
+            padding-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+        .custom-form-wrapper .form-field-group {
+            margin-bottom: 20px;
+        }
+        .custom-form-wrapper .form-field-group:last-of-type:not(.form-submit-group) {
+             margin-bottom: 20px;
+        }
+        .custom-form-wrapper .form-captcha-group {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .custom-form-wrapper .captcha-question-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+            color: #4A4A4A;
+            background-color: #F7F9FC;
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid #DDE2E8;
+        }
+        .custom-form-wrapper #mathCaptchaQuestion {
+            min-width: 50px;
+            display: inline-block;
+            text-align: center;
+        }
+         .custom-form-wrapper .captcha-answer-input {
+            flex-grow: 1;
+            min-width: 80px;
+            max-width: 120px;
+        }
+        .custom-form-wrapper .captcha-error-message {
+            display: none;
+            color: #D8000C;
+            background-color: #FFD2D2;
+            border: 1px solid #D8000C;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            width: 100%;
+            margin-top: 8px;
+        }
+        .custom-form-wrapper .form-submit-group {
+            margin-top: 35px;
+            margin-bottom: 0;
+        }
+        .custom-form-wrapper .form-field-label {
+            display: block;
+            font-size: 0.9rem;
+            color: #4A4A4A;
+            margin-bottom: 8px;
+            font-weight: 500;
+            text-align: right;
+        }
+        .custom-form-wrapper .form-field-label .required-star {
+            color: #DAA520;
+            margin-right: 3px;
+            font-weight: bold;
+        }
+        .custom-form-wrapper .form-input,
+        .custom-form-wrapper .form-textarea,
+        .custom-form-wrapper .form-select {
+            width: 100%;
+            padding: 12px 18px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            color: #4A4A4A;
+            background-color: #F7F9FC;
+            border: 1px solid #DDE2E8;
+            border-radius: 10px;
+            transition: border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            box-shadow: none;
+        }
+        .custom-form-wrapper .form-input:focus,
+        .custom-form-wrapper .form-textarea:focus,
+        .custom-form-wrapper .form-select:focus {
+            outline: none;
+            border-color: #DAA520;
+            background-color: #FFFFFF;
+            box-shadow: 0 0 0 3px rgba(218, 165, 32, 0.15);
+        }
+        .custom-form-wrapper .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        .custom-form-wrapper ::placeholder {
+            color: #A0A0A0;
+            opacity: 1;
+        }
+        .custom-form-wrapper :-ms-input-placeholder { color: #A0A0A0; }
+        .custom-form-wrapper ::-ms-input-placeholder { color: #A0A0A0; }
+
+        .custom-form-wrapper .form-select-container { position: relative; }
+        .custom-form-wrapper .form-select { padding-left: 45px !important; cursor: pointer; }
+        .custom-form-wrapper .form-select-container::after {
+            content: ''; position: absolute; top: 50%; left: 18px; width: 0; height: 0;
+            border: 5px solid transparent; border-top-color: #A0A0A0;
+            transform: translateY(-50%) translateY(-2px); pointer-events: none;
+            transition: border-top-color 0.25s ease, transform 0.25s ease;
+        }
+        .custom-form-wrapper .form-select-container select:focus + ::after,
+        .custom-form-wrapper .form-select-container:hover ::after { border-top-color: #DAA520; }
+        .custom-form-wrapper .form-select-container select:focus + ::after { transform: translateY(-50%) translateY(-2px) rotate(180deg); }
+
+        .custom-form-wrapper .jalali-datepicker-input {
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%23A0A0A0" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7v-5z"/><path fill="none" d="M0 0h24v24H0z"/></svg>');
+            background-repeat: no-repeat; background-position: left 15px center; padding-left: 45px !important;
+        }
+        .custom-form-wrapper .jalali-datepicker-input:focus {
+             background-image: url('data:image/svg+xml;utf8,<svg fill="%23DAA520" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7v-5z"/><path fill="none" d="M0 0h24v24H0z"/></svg>');
+        }
+
+        .custom-form-wrapper .conditional-fields-group {
+            display: none; padding: 20px; background-color: #fdf9f2;
+            border: 1px solid #f5eadd; border-radius: 8px; margin-top: 10px;
+        }
+        .custom-form-wrapper .conditional-fields-group.visible { display: block; }
+        .custom-form-wrapper .radio-group-container { display: flex; flex-wrap: wrap; gap: 10px 20px; }
+        .custom-form-wrapper .radio-option { display: flex; align-items: center; cursor: pointer; padding: 5px 0; }
+        .custom-form-wrapper .custom-radio-input { opacity: 0; position: absolute; width: 0; height: 0; }
+        .custom-form-wrapper .custom-radio-label {
+            position: relative; padding-right: 32px; font-size: 0.9rem; color: #4A4A4A;
+            cursor: pointer; user-select: none; line-height: 22px;
+        }
+        .custom-form-wrapper .custom-radio-label::before {
+            content: ''; position: absolute; right: 0; top: 0; width: 20px; height: 20px;
+            border: 2px solid #DDE2E8; border-radius: 50%; background-color: #FFFFFF;
+            transition: all 0.2s ease-in-out;
+        }
+        .custom-form-wrapper .custom-radio-label::after {
+            content: ''; position: absolute; right: 5px; top: 5px; width: 12px; height: 12px;
+            border-radius: 50%; background-color: #DAA520; transform: scale(0);
+            transition: transform 0.2s ease-in-out;
+        }
+        .custom-form-wrapper .custom-radio-input:checked + .custom-radio-label::before { border-color: #DAA520; }
+        .custom-form-wrapper .custom-radio-input:checked + .custom-radio-label::after { transform: scale(1); }
+        .custom-form-wrapper .custom-radio-input:focus-visible + .custom-radio-label::before { box-shadow: 0 0 0 3px rgba(218, 165, 32, 0.25); }
+
+        .custom-form-wrapper .form-submit-button {
+            display: inline-block; width: 100%; padding: 12px 25px; background-color: #DAA520;
+            color: #FFFFFF; border: none; border-radius: 10px; font-size: 1.05rem; font-weight: 600;
+            font-family: inherit; cursor: pointer; text-align: center;
+            transition: background-color 0.25s ease, transform 0.15s ease, box-shadow 0.25s ease;
+            box-shadow: 0 4px 12px rgba(218, 165, 32, 0.25); text-decoration: none;
+            -webkit-appearance: none; -moz-appearance: none; appearance: none;
+        }
+        .custom-form-wrapper .form-submit-button:hover,
+        .custom-form-wrapper .form-submit-button:focus {
+            background-color: #c7951c; transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(218, 165, 32, 0.35); color: #FFFFFF; outline: none;
+        }
+        .custom-form-wrapper .form-submit-button:active { transform: translateY(0px); box-shadow: 0 3px 10px rgba(218, 165, 32, 0.2); }
+
+        @media (max-width: 768px) {
+            .custom-form-wrapper { padding: 25px 30px; margin-top: 15px; margin-bottom: 15px; }
+            .custom-form-wrapper .form-title { font-size: 1.6rem; margin-bottom: 25px; padding-bottom: 15px; }
+            .custom-form-wrapper .form-field-group { margin-bottom: 18px; }
+            .custom-form-wrapper .conditional-fields-group { padding: 15px; }
+            .custom-form-wrapper .form-captcha-group { flex-direction: column; align-items: flex-start; }
+            .custom-form-wrapper .captcha-answer-input { max-width: 100%; }
+        }
+        @media (max-width: 576px) {
+            .custom-form-wrapper { padding: 20px; }
+            .custom-form-wrapper .form-title { font-size: 1.45rem; margin-bottom: 20px; }
+            .custom-form-wrapper .form-field-label { font-size: 0.85rem; margin-bottom: 6px; }
+            .custom-form-wrapper .form-input,
+            .custom-form-wrapper .form-textarea,
+            .custom-form-wrapper .form-select { font-size: 0.9rem; padding: 10px 15px; }
+            .custom-form-wrapper .form-submit-button { font-size: 1rem; padding: 12px 20px; }
+            .custom-form-wrapper .radio-group-container { gap: 8px 15px; }
+            .custom-form-wrapper .custom-radio-label { font-size: 0.85rem; padding-right: 28px; }
+            .custom-form-wrapper .custom-radio-label::before { width: 18px; height: 18px; }
+            .custom-form-wrapper .custom-radio-label::after { width: 10px; height: 10px; right: 4px; top: 4px; }
+        }
+        @media (max-width: 380px) {
+            .custom-form-wrapper { padding: 15px; border-radius: 12px; }
+            .custom-form-wrapper .form-title { font-size: 1.3rem; }
+            .custom-form-wrapper .form-input,
+            .custom-form-wrapper .form-textarea,
+            .custom-form-wrapper .form-select { font-size: 0.85rem; padding: 9px 12px; }
+            .custom-form-wrapper .form-submit-button { font-size: 0.95rem; }
+        }
+        /* =============== پایان استایل‌های فرم =============== */
+    </style>
+</head>
+<body>
+
+    <div class="custom-form-wrapper">
+        <h2 class="form-title">فرم درخواست ویژه املاک</h2>
+
+        
+            <div class="form-field-group">
+                <label for="fullName" class="form-field-label">نام و نام خانوادگی<span class="required-star">*</span></label>
+                <input type="text" id="fullName" name="property_fullName" class="form-input" placeholder="مثال: مریم رضایی" required />
+            </div>
+            <div class="form-field-group">
+                <label for="email" class="form-field-label">ایمیل شما<span class="required-star">*</span></label>
+                <input type="email" id="email" name="property_email" class="form-input" placeholder="youremail@example.com" required />
+            </div>
+            <div class="form-field-group">
+                <label for="phoneNumber" class="form-field-label">شماره تماس<span class="required-star">*</span></label>
+                <input type="tel" id="phoneNumber" name="property_phoneNumber" class="form-input" placeholder="مثال: ۰۹۱۲۳۴۵۶۷۸۹" required pattern="09[0-9]{9}" title="شماره تماس صحیح با ۰۹ شروع شده و ۱۱ رقم می‌باشد." />
+            </div>
+            <div class="form-field-group">
+                <label for="requestSubject" class="form-field-label">موضوع/شرح مختصر درخواست<span class="required-star">*</span></label>
+                <input type="text" id="requestSubject" name="property_requestSubject" class="form-input" placeholder="مثال: خرید آپارتمان دو خوابه در منطقه ..." required />
+            </div>
+            <div class="form-field-group">
+                <label for="transactionType" class="form-field-label">نوع معامله<span class="required-star">*</span></label>
+                <div class="form-select-container">
+                    <select id="transactionType" name="property_transactionType" class="form-select" required>
+                        <option value="" disabled selected>انتخاب کنید...</option>
+                        <option value="rent" data-target-group-id="groupPropertyUsage">اجاره</option>
+                        <option value="buy" data-target-group-id="groupPropertyKindBuy">خرید</option>
+                        <option value="full_mortgage" data-target-group-id="groupPropertyUsage">رهن کامل</option>
+                        <option value="construction_partnership" data-target-group-id="groupPropertyKindPartnership">مشارکت در ساخت</option>
+                    </select>
+                </div>
+            </div>
+            <div id="conditionalFieldsContainer">
+                <div class="form-field-group conditional-fields-group" id="groupPropertyUsage">
+                    <label class="form-field-label">نوع کاربری ملک درخواستی<span class="required-star">*</span></label>
+                    <div class="radio-group-container">
+                        <div class="radio-option"><input type="radio" id="usageResidential" name="property_usage" value="residential" class="custom-radio-input"><label for="usageResidential" class="custom-radio-label">مسکونی</label></div>
+                        <div class="radio-option"><input type="radio" id="usageCommercial" name="property_usage" value="commercial" class="custom-radio-input"><label for="usageCommercial" class="custom-radio-label">تجاری</label></div>
+                    </div>
+                </div>
+                <div class="form-field-group conditional-fields-group" id="groupPropertyKindBuy">
+                    <label class="form-field-label">نوع ملک برای خرید<span class="required-star">*</span></label>
+                    <div class="radio-group-container">
+                        <div class="radio-option"><input type="radio" id="kindVilla" name="property_kind_buy" value="villa" class="custom-radio-input"><label for="kindVilla" class="custom-radio-label">ویلایی</label></div>
+                        <div class="radio-option"><input type="radio" id="kindApartment" name="property_kind_buy" value="apartment" class="custom-radio-input"><label for="kindApartment" class="custom-radio-label">آپارتمان</label></div>
+                    </div>
+                </div>
+                <div class="form-field-group conditional-fields-group" id="groupPropertyKindPartnership">
+                    <label class="form-field-label">وضعیت ملک برای مشارکت<span class="required-star">*</span></label>
+                    <div class="radio-group-container">
+                        <div class="radio-option"><input type="radio" id="statusOldHouse" name="property_status_partnership" value="old_house" class="custom-radio-input"><label for="statusOldHouse" class="custom-radio-label">کلنگی</label></div>
+                        <div class="radio-option"><input type="radio" id="statusLand" name="property_status_partnership" value="land" class="custom-radio-input"><label for="statusLand" class="custom-radio-label">زمین</label></div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-field-group">
+                <label for="bedrooms" class="form-field-label">تعداد اتاق خواب (اختیاری)</label>
+                <input type="number" id="bedrooms" name="property_bedrooms" class="form-input" placeholder="مثلاً: 3" min="0">
+            </div>
+            <div class="form-field-group">
+                <label for="preferredDate" class="form-field-label">تاریخ مورد نظر برای بازدید/تحویل (اختیاری)</label>
+                <input type="text" id="preferredDate" name="property_preferredDate" class="form-input jalali-datepicker-input" placeholder="مثال: ۱۴۰۳/۰۵/۲۰">
+            </div>
+
+            <div class="form-field-group">
+                <label for="message" class="form-field-label">توضیحات و جزئیات بیشتر<span class="required-star">*</span></label>
+                <textarea id="message" name="property_message" class="form-textarea" placeholder="لطفاً جزئیات کامل ملک مورد نظر، محدوده قیمت، امکانات خاص و سایر موارد را اینجا بنویسید..." required rows="5"></textarea>
+            </div>
+
+            <div class="form-field-group">
+                <label for="mathCaptchaAnswer" class="form-field-label">سوال امنیتی (برای جلوگیری از اسپم)<span class="required-star">*</span></label>
+                <div class="form-captcha-group">
+                    <div class="captcha-question-container">
+                        <span id="mathCaptchaQuestion"></span> <span>= ؟</span>
+                    </div>
+                    <input type="number" id="mathCaptchaAnswer" name="property_captchaAnswer" class="form-input captcha-answer-input" placeholder="پاسخ" required title="لطفا پاسخ سوال ریاضی را وارد کنید." />
+                </div>
+                <div class="captcha-error-message" id="captchaErrorMessage">پاسخ کپچا نادرست است.</div>
+            </div>
+            <div class="form-submit-group">
+                <button type="submit" class="form-submit-button">ارسال درخواست</button>
+            </div>
+        
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const transactionTypeSelect = document.getElementById('transactionType');
+    const allConditionalGroups = document.querySelectorAll('.conditional-fields-group');
+
+    const mathCaptchaQuestionEl = document.getElementById('mathCaptchaQuestion');
+    const mathCaptchaAnswerEl = document.getElementById('mathCaptchaAnswer');
+    const captchaErrorMessageEl = document.getElementById('captchaErrorMessage');
+    let captchaNum1, captchaNum2, captchaCorrectAnswer;
+
+    function generateMathCaptcha() {
+        captchaNum1 = Math.floor(Math.random() * 10) + 1;
+        captchaNum2 = Math.floor(Math.random() * 10) + 1;
+        captchaCorrectAnswer = captchaNum1 + captchaNum2;
+        if (mathCaptchaQuestionEl) {
+            mathCaptchaQuestionEl.textContent = captchaNum1 + " + " + captchaNum2;
+        }
+        if (captchaErrorMessageEl) {
+            captchaErrorMessageEl.style.display = 'none';
+        }
+        if(mathCaptchaAnswerEl) {
+            mathCaptchaAnswerEl.value = '';
+        }
+    }
+
+    if (mathCaptchaQuestionEl && mathCaptchaAnswerEl) {
+        generateMathCaptcha();
+    }
+
+    function updateConditionalFieldsVisibility() {
+        if (!transactionTypeSelect) return;
+        const selectedOptionElement = transactionTypeSelect.options[transactionTypeSelect.selectedIndex];
+        const targetGroupId = selectedOptionElement ? selectedOptionElement.dataset.targetGroupId : null;
+
+        allConditionalGroups.forEach(group => {
+            group.classList.remove('visible');
+            const inputsInsideGroup = group.querySelectorAll('input[type="radio"], select, input[type="text"], textarea');
+            inputsInsideGroup.forEach(input => input.required = false);
+        });
+
+        if (targetGroupId) {
+            const targetGroupElement = document.getElementById(targetGroupId);
+            if (targetGroupElement) {
+                targetGroupElement.classList.add('visible');
+                const inputsInTargetGroup = targetGroupElement.querySelectorAll('input[type="radio"]');
+                inputsInTargetGroup.forEach(input => {
+                    if (targetGroupElement.classList.contains('visible')) {
+                         input.required = true;
+                    }
+                });
+            }
+        }
+    }
+
+    if (transactionTypeSelect) {
+        transactionTypeSelect.addEventListener('change', updateConditionalFieldsVisibility);
+        updateConditionalFieldsVisibility();
+    }
+
+    const form = document.getElementById('propertyRequestForm');
+    if (form) {
+        form.addEventListener('submit', function(event) {
+            if (mathCaptchaAnswerEl && captchaErrorMessageEl) {
+                const userAnswer = parseInt(mathCaptchaAnswerEl.value, 10);
+                if (userAnswer !== captchaCorrectAnswer) {
+                    event.preventDefault();
+                    captchaErrorMessageEl.style.display = 'block';
+                    mathCaptchaAnswerEl.focus();
+                    generateMathCaptcha();
+                    return;
+                } else {
+                    captchaErrorMessageEl.style.display = 'none';
+                }
+            }
+
+            let conditionalValidationError = false;
+            allConditionalGroups.forEach(group => {
+                if (group.classList.contains('visible')) {
+                    const radioInputs = group.querySelectorAll('input[type="radio"]');
+                    if (radioInputs.length > 0) {
+                        let isAnyRadioChecked = false;
+                        radioInputs.forEach(radio => {
+                            if (radio.checked) isAnyRadioChecked = true;
+                        });
+                        if (!isAnyRadioChecked) {
+                            conditionalValidationError = true;
+                            const groupLabel = group.querySelector('.form-field-label');
+                            const labelText = groupLabel ? groupLabel.textContent.replace('*','').trim() : "گزینه مربوطه";
+                            alert('لطفاً یک گزینه برای "' + labelText + '" انتخاب کنید.');
+                            if (!event.defaultPrevented) event.preventDefault();
+                            radioInputs[0].focus();
+                        }
+                    }
+                }
+            });
+            if (conditionalValidationError && !event.defaultPrevented) {
+                 event.preventDefault();
+            }
+        });
+    }
+
+    /*
+    // if (typeof persianDatepicker === "function") {
+    //     new persianDatepicker('.jalali-datepicker-input', { });
+    // }
+    */
+});
+</script>
+
+</body>
+</html>
